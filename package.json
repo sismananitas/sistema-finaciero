@@ -26,6 +26,8 @@
         "vue-loader": "^16.1.2"
     },
     "dependencies": {
-        "@inertiajs/progress": "^0.2.4"
+        "@inertiajs/progress": "^0.2.4",
+        "moment": "^2.29.1",
+        "sweetalert2": "^10.15.5"
     }
 }

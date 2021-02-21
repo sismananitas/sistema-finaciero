@@ -22,5 +22,7 @@ Route::get('/', [ WelcomeController::class, 'render' ])->name('welcome');
 Route::get('/dashboard', [ HomeController::class, 'render' ])->name('dashboard');
 
 Route::get('/cuentas', [ AccountsController::class, 'render' ])->name('accounts');
+Route::post('/accounts', [ AccountsController::class, 'store' ])->name('accounts.store');
 
 Route::get('/movimientos', [ TransactionsController::class, 'render' ])->name('transactions');
+Route::post('/transactions', [ TransactionsController::class, 'store' ])->name('transactions.store');
