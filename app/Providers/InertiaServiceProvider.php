@@ -37,11 +37,17 @@ class InertiaServiceProvider extends ServiceProvider
             }
         });
 
-        // Navbar routes
-        Inertia::share("navbar_routes", function () {
+        Inertia::share('taxes', function () {
             return [
-                [ "name" => "home", "url" => '/home', "text"=> "Inicio" ],
-                [ "name" => "accounts.index", "url" => '/cuentas', "text" => "Cuentas" ],
+                'iva' => 0.16,
+            ];
+        });
+
+        // Navbar routes
+        Inertia::share('navbar_routes', function () {
+            return [
+                [ 'name' => 'home', 'url' => '/home', 'text'=> 'Inicio' ],
+                [ 'name' => 'accounts.index', 'url' => '/cuentas', 'text' => 'Cuentas' ],
             ];
         });
     }

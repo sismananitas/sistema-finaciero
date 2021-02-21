@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100">
+    <div class="bg-gray-100 cursor-default">
+        <div class="min-h-screen">
             <navbar></navbar>
 
             <!-- Page Heading -->

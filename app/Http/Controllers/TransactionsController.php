@@ -9,14 +9,23 @@ use Inertia\Inertia;
 
 class TransactionsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function render()
     {
         $accounts = Account::all();
-        $transactions = Transaction::with('account')->orderByDesc('created_at')->get();
+        $transactions = Transaction::with('account')->with('user')->orderByDesc('created_at')->paginate(5);
+        $income = Transaction::where('type', 'ingreso')->sum('amount');
+        $expences = Transaction::where('type', 'egreso')->sum('amount');
+        $balance = $income - $expences;
 
         return Inertia::render('Transactions/Index', [
             'accounts' => $accounts,
             'transactions' => $transactions,
+            'balance' => $balance,
         ]);
     }
 
@@ -27,7 +36,7 @@ class TransactionsController extends Controller
             'concept' => 'required',
             'type' => 'required',
             'amount' => 'required',
-            'has_taxes' => 'nullable',
+            'taxes' => 'nullable',
             'description' => 'nullable',
         ]);
 
@@ -39,7 +48,7 @@ class TransactionsController extends Controller
         $transaction->concept = $data['concept'];
         $transaction->type = $data['type'];
         $transaction->amount = $data['amount'];
-        $transaction->taxes = $data['has_taxes'] ?? 0;
+        $transaction->taxes = $data['taxes'] ?? 0;
         $transaction->description = $data['description'] ?? '';
         $transaction->save();
 

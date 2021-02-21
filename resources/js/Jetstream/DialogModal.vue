@@ -1,5 +1,5 @@
 <template>
-    <modal :show="show" :max-width="maxWidth" :closeable="closeable" @close="close">
+    <modal :show="show" :max-width="maxWidth" :closeable="closeable" @before-enter="$emit('before-enter')" @close="close">
         <div class="px-6 py-4">
             <div class="text-lg">
                 <slot name="title">
@@ -23,7 +23,7 @@
     import Modal from './Modal'
 
     export default {
-        emits: ['close'],
+        emits: ['close', 'before-enter'],
 
         components: {
             Modal,
