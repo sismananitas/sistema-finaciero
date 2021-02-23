@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountsController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionsController;
 use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,5 @@ Route::post('/accounts', [ AccountsController::class, 'store' ])->name('accounts
 
 Route::get('/movimientos', [ TransactionsController::class, 'render' ])->name('transactions');
 Route::post('/transactions', [ TransactionsController::class, 'store' ])->name('transactions.store');
+
+Route::get('/roles', [ RolesController::class, 'render' ])->name('roles.render');
