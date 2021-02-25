@@ -110,6 +110,18 @@
                                     Profile
                                 </jet-dropdown-link>
 
+                                <jet-dropdown-link :href="route('roles.render')">
+                                    Roles
+                                </jet-dropdown-link>
+
+                                <jet-dropdown-link :href="route('permissions.render')">
+                                    Permisos
+                                </jet-dropdown-link>
+
+                                <jet-dropdown-link :href="route('control.panel')">
+                                    Control panel
+                                </jet-dropdown-link>
+
                                 <jet-dropdown-link :href="route('api-tokens.index')" v-if="$page.props.jetstream.hasApiFeatures">
                                     API Tokens
                                 </jet-dropdown-link>
