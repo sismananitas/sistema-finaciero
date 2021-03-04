@@ -24,7 +24,7 @@
                             </tr>
                         </thead>
                         <tbody v-for="account in accounts" :key="account.id">
-                            <tr>
+                            <tr @click="clickAccount(account)">
                                 <td class="p-4 border-b">{{ account.id }}</td>
                                 <td class="p-4 border-b">{{ account.name }}</td>
                                 <td class="p-4 border-b">{{ account.number }}</td>
@@ -37,7 +37,17 @@
                 </div>
             </div>
         </div>
-        <register-account-modal :show="registerAccount" @close="closeRegisterAccount"></register-account-modal>
+        <register-account-modal
+            :show="registerAccount"
+            @close="closeModals"
+            @refreshAccounts="refreshAccounts">
+        </register-account-modal>
+        <update-account-modal
+            :show="updateAccount"
+            :account="account"
+            @close="closeModals"
+            @refreshAccounts="refreshAccounts">
+        </update-account-modal>
     </app-layout>
 </template>
 
@@ -45,6 +55,7 @@
 import AppLayout from '@/Layouts/AppLayout'
 import ButtonPrimary from '@/Shared/ButtonPrimary'
 import RegisterAccountModal from './Modals/RegisterAccountModal'
+import UpdateAccountModal from './Modals/UpdateAccountModal'
 
 export default {
     props: [ 'accounts' ],
@@ -53,21 +64,34 @@ export default {
         AppLayout,
         ButtonPrimary,
         RegisterAccountModal,
+        UpdateAccountModal,
     },
 
     data() {
         return {
             registerAccount: false,
+            updateAccount: false,
+            account: {}
         }
     },
 
     methods: {
+        clickAccount(account) {
+            this.account = account
+            this.updateAccount = true
+        },
+
         showRegisterAccount() {
             this.registerAccount = true
         },
 
-        closeRegisterAccount() {
+        closeModals() {
             this.registerAccount = false
+            this.updateAccount = false
+        },
+
+        refreshAccounts() {
+            this.$inertia.reload({ only: ['accounts'], preserveScroll: true })
         }
     }
 }

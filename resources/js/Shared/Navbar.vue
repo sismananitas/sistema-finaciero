@@ -118,6 +118,10 @@
                                     Permisos
                                 </jet-dropdown-link>
 
+                                <jet-dropdown-link :href="route('users.index')">
+                                    Usuarios
+                                </jet-dropdown-link>
+
                                 <jet-dropdown-link :href="route('control.panel')">
                                     Control panel
                                 </jet-dropdown-link>

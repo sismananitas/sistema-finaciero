@@ -1,7 +1,7 @@
 <template>
-    <dialog-modal :show="show" @close="close" @before-enter="cleanForm">
+    <dialog-modal :show="show" @close="close" @before-enter="fillForm">
         <template #title>
-            Registrar cuenta
+            {{ form.name }}
         </template>
         <template #content>
             <div class="form">
@@ -31,23 +31,28 @@
             </div>
         </template>
         <template #footer>
-            <button-primary type="button" @click="store">Registrar</button-primary>
+            <button-warning type="button" @click="edit">Actualizar</button-warning>
+            <button-danger class="ml-2" type="button" @click="del">Eliminar</button-danger>
         </template>
     </dialog-modal>
 </template>
 
 <script>
 import DialogModal from '@/Jetstream/DialogModal'
-import ButtonPrimary from '@/Shared/ButtonPrimary'
+import ButtonWarning from '@/Shared/ButtonWarning'
+import ButtonDanger from '@/Shared/ButtonDanger'
 import Axios from 'axios'
 import Swal from 'sweetalert2'
 
 export default {
-    props: ['show'],
+    props: ['show', 'account'],
+
+    emits: ['close', 'refreshAccounts'],
 
     components: {
         DialogModal,
-        ButtonPrimary,
+        ButtonWarning,
+        ButtonDanger,
     },
 
     data() {
@@ -62,17 +67,57 @@ export default {
             this.$emit('close')
         },
 
-        cleanForm() {
-            this.form = {}
+        fillForm() {
+            this.form = JSON.parse(JSON.stringify(this.account))
             this.errors = {}
         },
 
-        store() {
-            Axios.post('/accounts', this.form)
+        edit() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Precaución',
+                text: 'Esta acción es irrebersible',
+                showCancelButton: true,
+            })
+            .then(result => {
+                if (result.isConfirmed) {
+                    this.update()
+                }
+            })
+        },
+
+        del() {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Precaución',
+                text: 'Esta acción es irrebersible',
+                showCancelButton: true,
+            })
+            .then(result => {
+                if (result.isConfirmed) {
+                    this.destroy()
+                }
+            })
+        },
+
+        update() {
+            Axios.put(`/accounts/${this.form.id}`, this.form)
             .then(this.successAlert)
             .then(this.refreshAccounts)
             .then(this.close)
             .catch(this.errorAlert)
+        },
+
+        destroy() {
+            Axios.delete(`/accounts/${this.form.id}`)
+            .then(this.successAlert)
+            .then(this.refreshAccounts)
+            .then(this.close)
+            .catch(this.errorAlert)
+        },
+
+        refreshAccounts() {
+            this.$emit('refreshAccounts')
         },
 
         successAlert(response) {
@@ -84,10 +129,6 @@ export default {
                 timer: 2000,
                 showConfirmButton: false,
             })
-        },
-
-        refreshAccounts() {
-            this.$emit('refreshAccounts')
         },
 
         errorAlert(fail) {

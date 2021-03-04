@@ -26,7 +26,7 @@ class AccountsController extends Controller
             'number' => 'required|numeric',
             'type' => 'required',
             'holder' => 'required',
-            'description' => 'nullable',
+            'description' => 'required',
         ]);
 
         $data = $request->all();
@@ -41,5 +41,33 @@ class AccountsController extends Controller
         $account->save();
 
         return response()->json([ 'message' => 'Registrada correctamente' ]);
+    }
+
+    public function update(Request $request, Account $account)
+    {
+        $request->validate([
+            'name' => 'required',
+            'number' => 'required|numeric',
+            'type' => 'required',
+            'holder' => 'required',
+            'description' => 'required',
+        ]);
+
+        $data = $request->all();
+
+        $account->name = $data['name'];
+        $account->number = $data['number'];
+        $account->type = $data['type'];
+        $account->holder = $data['holder'];
+        $account->description = $data['description'];
+        $account->save();
+
+        return response()->json([ 'message' => 'Actualizado correctamente.' ]);
+    }
+
+    public function destroy(Account $account)
+    {
+        $account->delete();
+        return response()->json([ 'message' => 'Eliminado correctamente.' ]);
     }
 }
