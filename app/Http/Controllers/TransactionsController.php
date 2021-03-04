@@ -54,4 +54,33 @@ class TransactionsController extends Controller
 
         return response()->json([ 'message' => 'Registrado correctamente' ]);
     }
+
+    public function update(Request $request, Transaction $transaction)
+    {
+        $request->validate([
+            'account_id' => 'required|numeric',
+            'concept' => 'required',
+            'type' => 'required',
+            'amount' => 'required',
+            'taxes' => 'nullable',
+            'description' => 'nullable',
+        ]);
+
+        $data = $request->all();
+        
+        $transaction->concept = $data['concept'];
+        $transaction->type = $data['type'];
+        $transaction->amount = $data['amount'];
+        $transaction->taxes = $data['taxes'] ?? 0;
+        $transaction->description = $data['description'] ?? '';
+        $transaction->save();
+
+        return response()->json([ 'message' => 'Actualizado correctamente' ]);
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        $transaction->delete();
+        return response()->json(['message' => 'Transacción eliminada correctamente.']);
+    }
 }

@@ -28,6 +28,8 @@ Route::delete('/accounts/{account}', [ AccountsController::class, 'destroy' ])->
 
 Route::get('/movimientos', [ TransactionsController::class, 'render' ])->name('transactions');
 Route::post('/transactions', [ TransactionsController::class, 'store' ])->name('transactions.store');
+Route::put('/transactions/{transaction}', [ TransactionsController::class, 'update' ])->name('transactions.update');
+Route::delete('/transactions/{transaction}', [ TransactionsController::class, 'destroy' ])->name('transactions.destroy');
 
 Route::get('/panel-control', [ ControlPanelController::class, 'render' ])->name('control.panel');
 

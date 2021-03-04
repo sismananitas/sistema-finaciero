@@ -35,7 +35,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="hover:bg-gray-100" v-for="transaction in transactions.data" :key="transaction.id">
+                            <tr
+                                class="hover:bg-gray-100"
+                                v-for="transaction in transactions.data"
+                                :key="transaction.id"
+                                @click="clickTransaction(transaction)">
                                 <td class="p-4 border-b">{{ transaction.id }}</td>
                                 <td class="p-4 border-b">{{ dateFormat(transaction.created_at) }}</td>
                                 <td class="p-4 border-b">{{ transaction.concept }}</td>
@@ -55,7 +59,19 @@
                 <pagination-links class="shadow" :links="transactions.links"></pagination-links>
             </div>
         </div>
-        <register-transaction :show="registerModal" :accounts="accounts" @close="closeRegisterModal" @refreshTransactions="refreshTransactions"></register-transaction>
+        <register-transaction
+            :show="registerModal"
+            :accounts="accounts"
+            @close="closeModals"
+            @refreshTransactions="refreshTransactions">
+        </register-transaction>
+        <update-transaction
+            :show="updateModal"
+            :accounts="accounts"
+            :transaction="transaction"
+            @close="closeModals"
+            @refreshTransactions="refreshTransactions">
+        </update-transaction>
     </app-layout>
 </template>
 
@@ -64,6 +80,7 @@
     import Welcome from '@/Jetstream/Welcome'
     import ButtonPrimary from '@/Shared/ButtonPrimary'
     import RegisterTransaction from './Modals/RegisterTransaction'
+    import UpdateTransaction from './Modals/UpdateTransaction'
     import PaginationLinks from '@/Shared/PaginationLinks'
 
     export default {
@@ -73,13 +90,16 @@
             AppLayout,
             Welcome,
             ButtonPrimary,
+            UpdateTransaction,
             RegisterTransaction,
             PaginationLinks,
         },
 
         data() {
             return {
-                registerModal: false
+                registerModal: false,
+                updateModal: false,
+                transaction: {},
             }
         },
 
@@ -88,8 +108,14 @@
                 this.registerModal = true
             },
 
-            closeRegisterModal() {
+            clickTransaction(transaction) {
+                this.transaction = transaction
+                this.updateModal = true
+            },
+
+            closeModals() {
                 this.registerModal = false
+                this.updateModal = false
             },
 
             colorTransaction(type) {
